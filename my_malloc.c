@@ -44,17 +44,36 @@ void* my_calloc_debug(size_t n, size_t size, char *calledFrom, int line)
 
     return mem;
 }
-/*
+
 void* my_realloc_debug(void *mem, size_t size, char *calledFrom, int line)
 {
+    // Get size of memory block and find the smaller of two sizes
+    size_t oldSize = *((char*)mem - sizeof(size_t));
+    size_t minSize = oldSize > size ? size : oldSize;
+
+    void *newBlock;
+    if ((newBlock = malloc(size + sizeof(size_t))) == NULL)
+	exit(1);
+
+    *((size_t*)newBlock) = size;
+    newBlock = (void*)((char*)newBlock + sizeof(size_t));
+
+    memcpy(newBlock, mem, minSize);
+
+    printf("[realloc] %p moved to %p and changed from %zu bytes to %zu bytes,\n"
+	    "wrote %d elements to new block from %s:%d\n", mem, newBlock, oldSize, size, (int)(minSize / sizeof(*mem)), calledFrom, line); 
+
+    my_free(mem);
+
+    return newBlock;
 }
-*/
 
 void my_free_debug(void *mem, char *calledFrom, int line)
 {
+    void* memAddress = mem;
     size_t size = *((char*)mem - sizeof(size_t));
     mem = (void*)((char*)mem - sizeof(size_t));
 
-    printf("[free] %zu bytes at %p from %s:%d\n", size, mem, calledFrom, line);
+    printf("[free] %zu bytes at %p from %s:%d\n", size, memAddress, calledFrom, line);
     free(mem);
 }
