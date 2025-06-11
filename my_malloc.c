@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include <string.h>
+#include <stdbool.h>
 
 static memory_block_t* memoryList;
 static int blocksAllocated = 0;
@@ -126,9 +127,28 @@ void* my_realloc_debug(void *mem, size_t size, char *calledFrom, int line)
 
 void my_free_debug(void *mem, char *calledFrom, int line)
 {
+
     void* memAddress = mem;
     size_t size = *((char*)mem - sizeof(size_t));
     mem = (void*)((char*)mem - sizeof(size_t));
+
+    // Make sure that memory provided is valid
+    bool memoryInList = false;
+    for (int i = 0; i < blocksAllocated; i++)
+    {
+        if (mem == memoryList[i].memoryAddress)
+        {
+            memoryInList = true;
+            break;
+        }
+    }
+
+    if (memoryInList == false)
+    {
+        printf("[free] Memory (%p) provided is not valid\n", mem);
+        exit(1);
+    }
+
 
     removeFromMemoryList(mem);
 

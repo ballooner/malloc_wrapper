@@ -14,7 +14,6 @@ int main(void)
 	printf("Array index %d = %d\n", i, myArr[i]);
     }
 
-
     // Test calloc and free on calloc
     printf("------- Calloc Test -------\n");
     int *myArr2 = my_calloc(4, sizeof(int));
@@ -23,7 +22,6 @@ int main(void)
     {
 	printf("Array index %d = %d\n", i, myArr2[i]);
     }
-
 
     // Test realloc and free on realloc
     printf("------- Realloc Test -------\n");
