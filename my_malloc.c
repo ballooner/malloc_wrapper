@@ -22,9 +22,36 @@ static void addToMemoryList(void *mem, size_t size)
         };
 
     memoryList[blocksAllocated - 1] = memoryBlock;
-
-    printf("[addToMemoryList] %p added at index %d of memory list\n", mem, blocksAllocated - 1);
 }
+
+static void removeFromMemoryList(void *mem)
+{
+    if (mem == memoryList[blocksAllocated - 1].memoryAddress)
+    {
+        memoryList = realloc(memoryList, (sizeof(memory_block_t) * blocksAllocated) - sizeof(memory_block_t));
+        blocksAllocated--;
+
+        return;
+    }
+
+    // Find memory in list and save address
+    int indexAt;
+    for (int i = 0; i < blocksAllocated; i++)
+    {
+        if (mem == memoryList[i].memoryAddress)
+        {
+            indexAt = i;
+            break;
+        }
+    }
+
+    // Swap the last index with the index to be removed
+    // then reallocate memory list without it's last index
+    memoryList[indexAt] = memoryList[blocksAllocated - 1];
+    blocksAllocated--;
+    memoryList = realloc(memoryList, sizeof(memory_block_t) * blocksAllocated);
+}
+
 
 void* my_malloc_debug(size_t size, char *calledFrom, int line)
 {
@@ -32,7 +59,9 @@ void* my_malloc_debug(size_t size, char *calledFrom, int line)
 
     void *mem;
     if ((mem = malloc(totalSize)) == NULL)
-	exit(1);
+	    exit(1);
+
+    addToMemoryList(mem, size);
 
     //Store the size of block
     *((size_t*)mem) = size;
@@ -41,7 +70,6 @@ void* my_malloc_debug(size_t size, char *calledFrom, int line)
 
     printf("[malloc] %zu bytes at %p from %s:%d\n", size, mem, calledFrom, line);
 
-    addToMemoryList(mem, size);
 
     return mem;
 }
@@ -57,6 +85,8 @@ void* my_calloc_debug(size_t n, size_t size, char *calledFrom, int line)
     if ((mem = malloc(mem_size)) == NULL)
 	exit(1);
 
+    addToMemoryList(mem, n * size);
+
     *((size_t*)mem) = size * n;
     mem = (void*)((char*)mem + sizeof(size_t));
 
@@ -65,7 +95,6 @@ void* my_calloc_debug(size_t n, size_t size, char *calledFrom, int line)
     printf("[calloc] %zu elements of %zu bytes allocated at %p and zeroed from %s:%d\n",
 	    n, size, mem, calledFrom, line);
 
-    addToMemoryList(mem, n * size);
 
     return mem;
 }
@@ -80,6 +109,8 @@ void* my_realloc_debug(void *mem, size_t size, char *calledFrom, int line)
     if ((newBlock = malloc(size + sizeof(size_t))) == NULL)
 	exit(1);
 
+    addToMemoryList(newBlock, size);
+
     *((size_t*)newBlock) = size;
     newBlock = (void*)((char*)newBlock + sizeof(size_t));
 
@@ -90,8 +121,6 @@ void* my_realloc_debug(void *mem, size_t size, char *calledFrom, int line)
 
     my_free(mem);
 
-    addToMemoryList(newBlock, size);
-
     return newBlock;
 }
 
@@ -100,6 +129,8 @@ void my_free_debug(void *mem, char *calledFrom, int line)
     void* memAddress = mem;
     size_t size = *((char*)mem - sizeof(size_t));
     mem = (void*)((char*)mem - sizeof(size_t));
+
+    removeFromMemoryList(mem);
 
     printf("[free] %zu bytes at %p from %s:%d\n", size, memAddress, calledFrom, line);
     free(mem);

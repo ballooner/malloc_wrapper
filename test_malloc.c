@@ -14,35 +14,35 @@ int main(void)
 	printf("Array index %d = %d\n", i, myArr[i]);
     }
 
-    my_free(myArr);
 
     // Test calloc and free on calloc
     printf("------- Calloc Test -------\n");
-    myArr = my_calloc(4, sizeof(int));
+    int *myArr2 = my_calloc(4, sizeof(int));
     
     for (int i = 0; i < 4; i++)
     {
-	printf("Array index %d = %d\n", i, myArr[i]);
+	printf("Array index %d = %d\n", i, myArr2[i]);
     }
 
-    my_free(myArr);
 
     // Test realloc and free on realloc
     printf("------- Realloc Test -------\n");
-    myArr = my_malloc(sizeof(int) * 4);
+    int *myArr3 = my_malloc(sizeof(int) * 4);
     for (int i = 0; i < 4; i++)
     {
-	myArr[i] = i;
-	printf("[Before] Array index %d = %d\n", i, myArr[i]);
+	myArr3[i] = i;
+	printf("Array index %d = %d\n", i, myArr3[i]);
     }
 
-    myArr = my_realloc(myArr, sizeof(int) * 3);
+    myArr3 = my_realloc(myArr3, sizeof(int) * 3);
     for (int i = 0; i < 3; i++)
     {
-	printf("Array index %d = %d\n", i, myArr[i]);
+	printf("Array index %d = %d\n", i, myArr3[i]);
     }
 
     my_free(myArr);
+    my_free(myArr2);
+    my_free(myArr3);
 
     return 0;
 }
