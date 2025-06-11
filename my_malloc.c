@@ -74,7 +74,9 @@ void* my_malloc_debug(size_t size, char *calledFrom, int line)
 
     void *mem;
     if ((mem = malloc(totalSize)) == NULL)
+    {
 	    exit(1);
+    }
 
     addToMemoryList(mem, size);
 
@@ -85,7 +87,6 @@ void* my_malloc_debug(size_t size, char *calledFrom, int line)
 
     printf("[malloc] %zu bytes at %p from %s:%d\n", size, mem, calledFrom, line);
 
-
     return mem;
 }
 
@@ -93,12 +94,16 @@ void* my_malloc_debug(size_t size, char *calledFrom, int line)
 void* my_calloc_debug(size_t n, size_t size, char *calledFrom, int line)
 {
     if (n == 0 || size == 0)
-	return NULL;
+    {
+	    return NULL;
+    }
 
     size_t mem_size = (n * size) + sizeof(size_t);
     void *mem;
     if ((mem = malloc(mem_size)) == NULL)
-	exit(1);
+    {
+	    exit(1);
+    }
 
     addToMemoryList(mem, n * size);
 
@@ -122,7 +127,9 @@ void* my_realloc_debug(void *mem, size_t size, char *calledFrom, int line)
 
     void *newBlock;
     if ((newBlock = malloc(size + sizeof(size_t))) == NULL)
-	exit(1);
+    {
+	    exit(1);
+    }
 
     addToMemoryList(newBlock, size);
 
