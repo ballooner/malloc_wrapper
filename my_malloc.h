@@ -14,7 +14,7 @@ typedef struct memory_block
     void* memoryAddress;
 } memory_block_t;
 
-void initializeMemoryManager();
+void clearMemoryOnExit(void);
 void* my_malloc_debug(size_t size, char *calledFrom, int line);
 void* my_calloc_debug(size_t n, size_t size, char *calledFrom, int line);
 void* my_realloc_debug(void *mem, size_t size, char *calledFrom, int line);

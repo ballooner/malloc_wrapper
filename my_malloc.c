@@ -53,6 +53,20 @@ static void removeFromMemoryList(void *mem)
     memoryList = realloc(memoryList, sizeof(memory_block_t) * blocksAllocated);
 }
 
+void clearMemoryOnExit(void)
+{
+    if (blocksAllocated == 0)
+    {
+        exit(0);
+    }
+
+    for (int i = 0; i < blocksAllocated; i++)
+    {
+        void *address = memoryList[i].memoryAddress;
+        printf("[clearMemoryOnExit] freeing unfreed %p of %zu bytes\n", address, memoryList[i].blockSize);
+        free(address);
+    }
+}
 
 void* my_malloc_debug(size_t size, char *calledFrom, int line)
 {

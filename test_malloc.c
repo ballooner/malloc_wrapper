@@ -1,9 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include "my_malloc.h"
 
 int main(void)
 {
+    atexit(clearMemoryOnExit);
+
     // Test malloc and free on malloc
     printf("------- Malloc Test -------\n");
     int *myArr = my_malloc(sizeof(int) * 4);
@@ -41,6 +44,9 @@ int main(void)
     my_free(myArr);
     my_free(myArr2);
     my_free(myArr3);
+
+    char* charArr1 = my_malloc(sizeof(char) * 10);
+    char* charArr2 = my_malloc(sizeof(char) * 5);
 
     return 0;
 }
