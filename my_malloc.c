@@ -123,11 +123,11 @@ void* my_realloc_debug(void *mem, size_t size, char *calledFrom, int line)
 {
     if (mem == NULL)
     {
-	return my_malloc(size);
+	    return my_malloc(size);
     } else if (size == 0)
     {
-	my_free(mem);
-	return NULL;
+	    my_free(mem);
+	    return NULL;
     }
 
     // Get size of memory block and find the smaller of two sizes
@@ -157,10 +157,9 @@ void* my_realloc_debug(void *mem, size_t size, char *calledFrom, int line)
 
 void my_free_debug(void *mem, char *calledFrom, int line)
 {
-
     void* memAddress = mem;
-    size_t size = *((char*)mem - sizeof(size_t));
     mem = (void*)((char*)mem - sizeof(size_t));
+    size_t size = *(size_t*)mem;
 
     // Make sure that memory provided is valid
     bool memoryInList = false;
@@ -176,9 +175,8 @@ void my_free_debug(void *mem, char *calledFrom, int line)
     if (memoryInList == false)
     {
         printf("[free] Memory (%p) provided is not valid\n", mem);
-        exit(1);
+        return;
     }
-
 
     removeFromMemoryList(mem);
 
