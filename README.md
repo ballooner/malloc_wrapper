@@ -6,12 +6,9 @@ any advanced techniques.
 
 ## Implementation
 Since this is my first iteration of the project I didn't get too deep in 
-management techniques and just implemented basic wrappers and a dynamic array
-to store allocated memory and handle memory that hasn't been 
-de-allocated on exit, I didn't implement things like:
-- Free-space management
-- Fragmentation
-- Paging
+management techniques and just implemented basic wrappers that use 
+standard library functions and a dynamic array to store allocated memory and
+handle memory that hasn't been de-allocated on exit.
 
 This version is located at:
 https://github.com/ballooner/memory_management/tree/memory-wrapper
