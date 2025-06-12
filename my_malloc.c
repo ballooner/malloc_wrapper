@@ -121,6 +121,15 @@ void* my_calloc_debug(size_t n, size_t size, char *calledFrom, int line)
 
 void* my_realloc_debug(void *mem, size_t size, char *calledFrom, int line)
 {
+    if (mem == NULL)
+    {
+	return my_malloc(size);
+    } else if (size == 0)
+    {
+	my_free(mem);
+	return NULL;
+    }
+
     // Get size of memory block and find the smaller of two sizes
     size_t oldSize = *((char*)mem - sizeof(size_t));
     size_t minSize = oldSize > size ? size : oldSize;
