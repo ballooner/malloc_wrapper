@@ -1,28 +1,22 @@
-# Simple Malloc Wrapper
-This project was initially started as a way to get start understanding memory
-management, as a lot of the details are typically hidden from the user. This
-project iteration is just a basic wrapper of malloc,calloc,realloc,free without
-any advanced techniques.
+# Memory management with simulated RAM structure
+This is the second iteration of my memory management project and it will start
+to dive into how a simple OS may handle a memory space.
 
-## Implementation
-Since this is my first iteration of the project I didn't get too deep in 
-management techniques and just implemented basic wrappers that use 
-standard library functions and a dynamic array to store allocated memory and
-handle memory that hasn't been de-allocated on exit.
-
-This version is located at:
-https://github.com/ballooner/memory_management/tree/memory-wrapper
+## Features
+- Allocation of a set size of memory using mmap() to simulate RAM.
+- A way to create a fake process that will allocate a random number of bytes
+    to be stored in the allocated RAM structure and then die after a short 
+    period of time.
+- A free list that keeps track of the available memory space we can allocate to 
+    a process.
+- Memory coalescing so we can deal with memory fragmentation.
+- Logging for:
+    - Memory allocation
+    - Memory deallocation 
+    - Process creation
+    - Defragmentation time
+- Program arguments to change how often processes get created, 
+    how much memory they will allocate and ability to write log to a text file.
 
 ### File Overview
-- my_malloc.h -> contains function/struct definitions for the implementation.
-- my_malloc.c -> contains the functionality of the wrappers.
-- test_malloc.c -> contains simple testing and can serve as an example on using
-                   the wrapper.
 
-### Future Plans
-For future iterations of this project (located in branches) I plan on
-implementing:
-- Management of a fixed (or expandable?) memory area from mmap.
-- Free-space tracking and block reuse
-- Fragmentation handling and block coalescing
-- Fixed-size paging (maybe dynamic size pages)
