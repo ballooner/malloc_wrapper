@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-W -Wall -g -O0
+CFLAGS=-W -Wextra -Wall -pedantic-errors
 
 program: *.c
 	$(CC) $(CFLAGS) *.c -o program
